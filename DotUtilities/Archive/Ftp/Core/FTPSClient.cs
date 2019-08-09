@@ -1,20 +1,20 @@
 ﻿#region header
 // ========================================================================
-// Copyright (c) 2018 - Julien Caillon (julien.caillon@gmail.com)
-// This file (FTPSClient.cs) is part of Oetools.Utilities.
-// 
-// Oetools.Utilities is a free software: you can redistribute it and/or modify
+// Copyright (c) 2019 - Julien Caillon (julien.caillon@gmail.com)
+// This file (FTPSClient.cs) is part of DotUtilities.
+//
+// DotUtilities is a free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
-// Oetools.Utilities is distributed in the hope that it will be useful,
+//
+// DotUtilities is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
-// along with Oetools.Utilities. If not, see <http://www.gnu.org/licenses/>.
+// along with DotUtilities. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================
 #endregion
 
@@ -31,9 +31,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Oetools.Utilities.Lib;
 
-namespace Oetools.Utilities.Archive.Ftp.Core {
+namespace DotUtilities.Archive.Ftp.Core {
     /*
      *  Copyright 2008 Alessandro Pilotti
      *
@@ -49,7 +48,7 @@ namespace Oetools.Utilities.Archive.Ftp.Core {
      *
      *  You should have received a copy of the GNU Lesser General Public License
      *  along with this program; if not, write to the Free Software
-     *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA 
+     *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
      */
 
     /// <summary>
@@ -135,7 +134,7 @@ namespace Oetools.Utilities.Archive.Ftp.Core {
     }
 
     /// <summary>
-    ///     File pattern style used in <see cref="FtpsClient.GetFiles(string,string,string,Oetools.Utilities.Archive.Ftp.Core.EPatternStyle,bool,Oetools.Utilities.Archive.Ftp.Core.FileTransferCallback)" /> and  <see cref="FtpsClient.PutFiles(string,string,string,Oetools.Utilities.Archive.Ftp.Core.EPatternStyle,bool,Oetools.Utilities.Archive.Ftp.Core.FileTransferCallback)" />.
+    ///     File pattern style used in <see cref="FtpsClient.GetFiles(string,string,string,DotUtilities.Archive.Ftp.Core.EPatternStyle,bool,DotUtilities.Archive.Ftp.Core.FileTransferCallback)" /> and  <see cref="FtpsClient.PutFiles(string,string,string,DotUtilities.Archive.Ftp.Core.EPatternStyle,bool,DotUtilities.Archive.Ftp.Core.FileTransferCallback)" />.
     /// </summary>
     internal enum EPatternStyle {
         /// <summary>
@@ -519,7 +518,7 @@ namespace Oetools.Utilities.Archive.Ftp.Core {
                 SslControlChannelCheckExplicitEncryptionRequest(sslSupportMode);
 
             // Login. Note that a password might not be required
-            // TODO: check if the welcomeMessage is returned by the USER command in case the PASS command is not required.  
+            // TODO: check if the welcomeMessage is returned by the USER command in case the PASS command is not required.
             if (UserCmd(credential.UserName))
                 WelcomeMessage = PassCmd(credential.Password);
 
@@ -582,7 +581,7 @@ namespace Oetools.Utilities.Archive.Ftp.Core {
         public void StopKeepAlive() {
             if (_keepAliveThread != null) {
                 _keepAlive = false;
-                // Interrupt any sleep/wait operation 
+                // Interrupt any sleep/wait operation
                 _keepAliveThread.Interrupt();
                 _keepAliveThread.Join();
                 _keepAliveThread = null;
@@ -648,7 +647,7 @@ namespace Oetools.Utilities.Archive.Ftp.Core {
         private string CleanRemotePath(string path) {
             return $"/{path.Replace("\\", "/").TrimStart('/')}";
         }
-        
+
         /// <summary>
         ///     GetFile overload to easily transfer a file from remote to local
         /// </summary>
@@ -1328,7 +1327,7 @@ namespace Oetools.Utilities.Archive.Ftp.Core {
             }
         }
 
-        private ulong SendFile(string localFileName, string remoteFileName, Stream s, FileTransferCallback transferCallback) {          
+        private ulong SendFile(string localFileName, string remoteFileName, Stream s, FileTransferCallback transferCallback) {
             ulong totalBytes = 0;
 
             ulong? fileTransferSize = null;
@@ -1480,7 +1479,7 @@ namespace Oetools.Utilities.Archive.Ftp.Core {
             else
                 addr = dataEndPoint.Address;
 
-            // Enter passive mode                
+            // Enter passive mode
             _dataClient = new TcpClient(addr.ToString(), dataEndPoint.Port);
 
             SetDataClientTimeout();

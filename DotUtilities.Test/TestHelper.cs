@@ -17,6 +17,7 @@
 // along with Oetools.Utilities.Test. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -24,7 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 
-namespace Oetools.Utilities.Test {
+namespace DotUtilities.Test {
     public static class TestHelper {
 
         private static readonly string TestFolder = Path.Combine(AppContext.BaseDirectory, "Tests");

@@ -1,6 +1,6 @@
-﻿using Oetools.Utilities.Archive;
+﻿using DotUtilities.Archive;
 
-namespace Oetools.Utilities.Test.Archive {
+namespace DotUtilities.Test.Archive {
     public class FileInArchive : IFileInArchiveToExtract, IFileInArchiveToDelete, IFileToArchive, IFileInArchiveToMove, IFileInArchiveToCheck {
         public string ArchivePath { get; set; }
         public string PathInArchive { get; set; }

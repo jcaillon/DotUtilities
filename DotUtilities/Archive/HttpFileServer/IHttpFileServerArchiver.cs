@@ -1,26 +1,26 @@
 ﻿#region header
 // ========================================================================
-// Copyright (c) 2018 - Julien Caillon (julien.caillon@gmail.com)
-// This file (IArchiver.cs) is part of Oetools.Utilities.
-// 
-// Oetools.Utilities is a free software: you can redistribute it and/or modify
+// Copyright (c) 2019 - Julien Caillon (julien.caillon@gmail.com)
+// This file (IHttpFileServerArchiver.cs) is part of DotUtilities.
+//
+// DotUtilities is a free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
-// Oetools.Utilities is distributed in the hope that it will be useful,
+//
+// DotUtilities is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
-// along with Oetools.Utilities. If not, see <http://www.gnu.org/licenses/>.
+// along with DotUtilities. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================
 #endregion
 
 using System.Collections.Generic;
 
-namespace Oetools.Utilities.Archive.HttpFileServer {
+namespace DotUtilities.Archive.HttpFileServer {
 
     /// <summary>
     /// <para>
@@ -36,20 +36,20 @@ namespace Oetools.Utilities.Archive.HttpFileServer {
         /// <param name="userName">Can be null. Format domain\username.</param>
         /// <param name="userPassword"></param>
         void SetProxy(string proxyUrl, string userName = null, string userPassword = null);
-        
+
         /// <summary>
         /// Use basic authentication for all the http requests of this archiver.
         /// </summary>
         /// <param name="userName">Format domain\username.</param>
         /// <param name="userPassword"></param>
         void SetBasicAuthentication(string userName, string userPassword);
-        
+
         /// <summary>
         /// Use custom headers for all the http requests of this archiver.
         /// </summary>
         /// <param name="headersKeyValue"></param>
         void SetHeaders(Dictionary<string, string> headersKeyValue);
-        
+
     }
 
 }

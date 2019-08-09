@@ -18,9 +18,7 @@
 // ========================================================================
 #endregion
 
-using Oetools.Utilities.Lib;
-
-namespace Oetools.Utilities.Test {
+namespace DotUtilities.Test {
     /// <summary>
     ///     This class represents a file that needs to be compiled
     /// </summary>

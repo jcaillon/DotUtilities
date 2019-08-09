@@ -22,12 +22,9 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
-using DotUtilities.Archive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Oetools.Utilities.Test.Lib.Http;
 
-namespace Oetools.Utilities.Test.Archive.HttpFileServer {
+namespace DotUtilities.Test.Archive.HttpFileServer {
 
     [TestClass]
     public class HttpFileServerArchiverTest : ArchiveTest {
@@ -84,7 +81,7 @@ namespace Oetools.Utilities.Test.Archive.HttpFileServer {
             PartialTestForHttpFileServer(archiver, listFiles);
 
             if (!host.Equals("127.0.0.1")) {
-                Assert.AreEqual(61, proxyServer.NbRequestsHandledOk);
+                Assert.AreEqual(62, proxyServer.NbRequestsHandledOk);
             }
 
             HttpServer.Stop(cts, task1, task2);

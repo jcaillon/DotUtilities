@@ -23,9 +23,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Oetools.Utilities.Test.Lib.Http;
 
-namespace Oetools.Utilities.Test.Archive.HttpFileServer {
+namespace DotUtilities.Test.Archive.HttpFileServer {
 
     internal class SimpleHttpFileServer {
         

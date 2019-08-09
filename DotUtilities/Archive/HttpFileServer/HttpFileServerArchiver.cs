@@ -1,20 +1,20 @@
 #region header
 // ========================================================================
-// Copyright (c) 2018 - Julien Caillon (julien.caillon@gmail.com)
-// This file (FileSystemArchiver.cs) is part of Oetools.Utilities.
-// 
-// Oetools.Utilities is a free software: you can redistribute it and/or modify
+// Copyright (c) 2019 - Julien Caillon (julien.caillon@gmail.com)
+// This file (HttpFileServerArchiver.cs) is part of DotUtilities.
+//
+// DotUtilities is a free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
-// Oetools.Utilities is distributed in the hope that it will be useful,
+//
+// DotUtilities is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
-// along with Oetools.Utilities. If not, see <http://www.gnu.org/licenses/>.
+// along with DotUtilities. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================
 #endregion
 
@@ -24,21 +24,19 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
-using Oetools.Utilities.Lib;
-using Oetools.Utilities.Lib.Extension;
-using Oetools.Utilities.Lib.Http;
+using DotUtilities.Http;
 
-namespace Oetools.Utilities.Archive.HttpFileServer {
-    
+namespace DotUtilities.Archive.HttpFileServer {
+
     /// <summary>
     /// In that case, a folder on the file system represents an archive.
     /// </summary>
     internal class HttpFileServerArchiver : IHttpFileServerArchiver {
-        
+
         private HttpRequest _httpRequest;
 
         private HttpRequest HttpRequest => _httpRequest ?? (_httpRequest = new HttpRequest(""));
-        
+
         /// <inheritdoc cref="IHttpFileServerArchiver.SetProxy"/>
         public void SetProxy(string proxyUrl, string userName = null, string userPassword = null) {
             HttpRequest.UseProxy(proxyUrl, userName, userPassword);
@@ -61,7 +59,7 @@ namespace Oetools.Utilities.Archive.HttpFileServer {
 
         /// <inheritdoc cref="IArchiver.OnProgress"/>
         public event EventHandler<ArchiverEventArgs> OnProgress;
-        
+
         /// <inheritdoc cref="IArchiver.ArchiveFileSet"/>
         public int ArchiveFileSet(IEnumerable<IFileToArchive> filesToArchive) {
             return DoAction(filesToArchive, Action.Upload);
@@ -76,14 +74,14 @@ namespace Oetools.Utilities.Archive.HttpFileServer {
         public int DeleteFileSet(IEnumerable<IFileInArchiveToDelete> filesToDelete) {
             return DoAction(filesToDelete, Action.Delete);
         }
-        
+
         private int DoAction(IEnumerable<IFileArchivedBase> filesIn, Action action) {
             if (filesIn == null) {
                 return 0;
             }
-            
+
             var files = filesIn.ToList();
-            
+
             // total size to handle
             long totalSizeDone = 0;
             long totalSize = 0;
@@ -140,7 +138,7 @@ namespace Oetools.Utilities.Archive.HttpFileServer {
                                     totalSizeDone += progress.NumberOfBytesDoneSinceLastProgress;
                                     OnProgress?.Invoke(this, ArchiverEventArgs.NewProgress(serverGroupedFiles.Key, fileRelativePath, Math.Round(totalSizeDone / (double) totalSize * 100, 2)));
                                 });
-                                
+
                                 requestOk = response.StatusCode == HttpStatusCode.OK;
                                 if (response.StatusCode == HttpStatusCode.NotFound || response.Exception is WebException we && we.Status == WebExceptionStatus.NameResolutionFailure) {
                                     // skip to next file
@@ -178,7 +176,7 @@ namespace Oetools.Utilities.Archive.HttpFileServer {
             }
             return nbFilesProcessed;
         }
-        
+
         private enum Action {
             Upload,
             Download,

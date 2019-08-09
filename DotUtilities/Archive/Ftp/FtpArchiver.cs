@@ -1,20 +1,20 @@
 ﻿#region header
 // ========================================================================
-// Copyright (c) 2018 - Julien Caillon (julien.caillon@gmail.com)
-// This file (FtpArchiver.cs) is part of Oetools.Utilities.
-// 
-// Oetools.Utilities is a free software: you can redistribute it and/or modify
+// Copyright (c) 2019 - Julien Caillon (julien.caillon@gmail.com)
+// This file (FtpArchiver.cs) is part of DotUtilities.
+//
+// DotUtilities is a free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
-// Oetools.Utilities is distributed in the hope that it will be useful,
+//
+// DotUtilities is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
-// along with Oetools.Utilities. If not, see <http://www.gnu.org/licenses/>.
+// along with DotUtilities. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================
 #endregion
 
@@ -24,14 +24,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Oetools.Utilities.Archive.Ftp.Core;
-using Oetools.Utilities.Lib;
-using Oetools.Utilities.Lib.Extension;
+using DotUtilities.Archive.Ftp.Core;
+using DotUtilities.Extensions;
 
-namespace Oetools.Utilities.Archive.Ftp {
-    
+namespace DotUtilities.Archive.Ftp {
+
     internal class FtpArchiver : ArchiverBase, IArchiverFullFeatured {
-        
+
         /// <inheritdoc />
         public int CheckFileSet(IEnumerable<IFileInArchiveToCheck> filesToCheck) {
             int total = 0;
@@ -40,9 +39,9 @@ namespace Oetools.Utilities.Archive.Ftp {
                     if (!ftpGroupedFiles.Key.ParseFtpAddress(out var uri, out var userName, out var passWord, out var host, out var port, out var relativePath)) {
                         throw new ArchiverException($"The ftp uri is invalid, the typical format is ftp://user:pass@server:port/path. Input uri was : {uri.PrettyQuote()}.");
                     }
-            
+
                     _cancelToken?.ThrowIfCancellationRequested();
-                    
+
                     var ftp = FtpsClient.Instance.Get(uri);
                     ConnectOrReconnectFtp(ftp, userName, passWord, host, port);
 
@@ -68,7 +67,7 @@ namespace Oetools.Utilities.Archive.Ftp {
                             throw new ArchiverException($"Failed to get the size of {file.PathInArchive.PrettyQuote()} from {file.ArchivePath.PrettyQuote()}.", e);
                         }
                     }
-                    
+
                     FtpsClient.Instance.DisconnectFtp();
                 } catch (OperationCanceledException) {
                     throw;
@@ -78,13 +77,13 @@ namespace Oetools.Utilities.Archive.Ftp {
             }
             return total;
         }
-        
+
         /// <inheritdoc cref="IArchiver.ArchiveFileSet"/>
         public int ArchiveFileSet(IEnumerable<IFileToArchive> filesToArchive) {
             if (filesToArchive == null) {
                 return 0;
             }
-            
+
             var filesToPack = filesToArchive.ToList();
             filesToPack.ForEach(f => f.Processed = false);
             int totalFiles = filesToPack.Count;
@@ -94,9 +93,9 @@ namespace Oetools.Utilities.Archive.Ftp {
                     if (!ftpGroupedFiles.Key.ParseFtpAddress(out var uri, out var userName, out var passWord, out var host, out var port, out var relativePath)) {
                         throw new ArchiverException($"The ftp uri is invalid, the typical format is ftp://user:pass@server:port/path. Input uri was : {uri.PrettyQuote()}.");
                     }
-            
+
                     _cancelToken?.ThrowIfCancellationRequested();
-                    
+
                     var ftp = FtpsClient.Instance.Get(uri);
                     ConnectOrReconnectFtp(ftp, userName, passWord, host, port);
 
@@ -126,7 +125,7 @@ namespace Oetools.Utilities.Archive.Ftp {
                             throw new ArchiverException($"Failed to send {file.SourcePath.PrettyQuote()} to {file.ArchivePath.PrettyQuote()} and distant path {file.PathInArchive.PrettyQuote()}.", e);
                         }
                     }
-                    
+
                     FtpsClient.Instance.DisconnectFtp();
                 } catch (OperationCanceledException) {
                     throw;
@@ -143,18 +142,18 @@ namespace Oetools.Utilities.Archive.Ftp {
 
         /// <inheritdoc cref="IArchiverList.ListFiles"/>
         public IEnumerable<IFileInArchive> ListFiles(string ftpUri) {
-            
+
             if (!ftpUri.ParseFtpAddress(out var uri, out var userName, out var passWord, out var host, out var port, out var relativePath)) {
                 throw new ArchiverException($"The ftp uri is invalid, the typical format is ftp://user:pass@server:port/path. Input uri was : {uri.PrettyQuote()}.");
             }
-            
+
             var ftp = FtpsClient.Instance.Get(uri);
             ConnectOrReconnectFtp(ftp, userName, passWord, host, port);
-            
+
             var folderStack = new Stack<string>();
             folderStack.Push(relativePath);
             while (folderStack.Count > 0) {
-                
+
                 var folder = folderStack.Pop();
                 ftp.SetCurrentDirectory(folder);
 
@@ -172,7 +171,7 @@ namespace Oetools.Utilities.Archive.Ftp {
                     }
                 }
             }
-            
+
             FtpsClient.Instance.DisconnectFtp();
         }
 
@@ -181,7 +180,7 @@ namespace Oetools.Utilities.Archive.Ftp {
             if (filesToExtractIn == null) {
                 return 0;
             }
-            
+
             var filesToExtract = filesToExtractIn.ToList();
             filesToExtract.ForEach(f => f.Processed = false);
             int totalFiles = filesToExtract.Count;
@@ -194,13 +193,13 @@ namespace Oetools.Utilities.Archive.Ftp {
                             Directory.CreateDirectory(extractDirGroupedFiles.Key);
                         }
                     }
-                    
+
                     if (!ftpGroupedFiles.Key.ParseFtpAddress(out var uri, out var userName, out var passWord, out var host, out var port, out var relativePath)) {
                         throw new ArchiverException($"The ftp uri is invalid, the typical format is ftp://user:pass@server:port/path. Input uri was : {uri.PrettyQuote()}.");
                     }
-            
+
                     _cancelToken?.ThrowIfCancellationRequested();
-                    
+
                     var ftp = FtpsClient.Instance.Get(uri);
                     ConnectOrReconnectFtp(ftp, userName, passWord, host, port);
 
@@ -226,7 +225,7 @@ namespace Oetools.Utilities.Archive.Ftp {
                             throw new ArchiverException($"Failed to get {file.ExtractionPath.PrettyQuote()} from {file.ArchivePath.PrettyQuote()} and distant path {file.PathInArchive.PrettyQuote()}.", e);
                         }
                     }
-                    
+
                     FtpsClient.Instance.DisconnectFtp();
                 } catch (OperationCanceledException) {
                     throw;
@@ -239,11 +238,11 @@ namespace Oetools.Utilities.Archive.Ftp {
         }
 
         /// <inheritdoc cref="IArchiverDelete.DeleteFileSet"/>
-        public int DeleteFileSet(IEnumerable<IFileInArchiveToDelete> filesToDeleteIn) {   
+        public int DeleteFileSet(IEnumerable<IFileInArchiveToDelete> filesToDeleteIn) {
             if (filesToDeleteIn == null) {
                 return 0;
             }
-            
+
             var filesToDelete = filesToDeleteIn.ToList();
             filesToDelete.ForEach(f => f.Processed = false);
             int totalFiles = filesToDelete.Count;
@@ -253,9 +252,9 @@ namespace Oetools.Utilities.Archive.Ftp {
                     if (!ftpGroupedFiles.Key.ParseFtpAddress(out var uri, out var userName, out var passWord, out var host, out var port, out var relativePath)) {
                         throw new ArchiverException($"The ftp uri is invalid, the typical format is ftp://user:pass@server:port/path. Input uri was : {uri.PrettyQuote()}.");
                     }
-            
+
                     _cancelToken?.ThrowIfCancellationRequested();
-                    
+
                     var ftp = FtpsClient.Instance.Get(uri);
                     try {
                         ConnectOrReconnectFtp(ftp, userName, passWord, host, port);
@@ -283,7 +282,7 @@ namespace Oetools.Utilities.Archive.Ftp {
                             throw new ArchiverException($"Failed to delete {file.PathInArchive.PrettyQuote()} from {file.ArchivePath.PrettyQuote()}.", e);
                         }
                     }
-                    
+
                     FtpsClient.Instance.DisconnectFtp();
                 } catch (OperationCanceledException) {
                     throw;
@@ -300,7 +299,7 @@ namespace Oetools.Utilities.Archive.Ftp {
             if (filesToMoveIn == null) {
                 return 0;
             }
-            
+
             var filesToMove = filesToMoveIn.ToList();
             filesToMove.ForEach(f => f.Processed = false);
             int totalFiles = filesToMove.Count;
@@ -310,9 +309,9 @@ namespace Oetools.Utilities.Archive.Ftp {
                     if (!ftpGroupedFiles.Key.ParseFtpAddress(out var uri, out var userName, out var passWord, out var host, out var port, out var relativePath)) {
                         throw new ArchiverException($"The ftp uri is invalid, the typical format is ftp://user:pass@server:port/path. Input uri was : {uri.PrettyQuote()}.");
                     }
-            
+
                     _cancelToken?.ThrowIfCancellationRequested();
-                    
+
                     var ftp = FtpsClient.Instance.Get(uri);
                     ConnectOrReconnectFtp(ftp, userName, passWord, host, port);
 
@@ -327,7 +326,7 @@ namespace Oetools.Utilities.Archive.Ftp {
                                 if (e.ErrorCode == 550) {
                                     // path does not exist
                                     continue;
-                                } 
+                                }
                                 if (e.ErrorCode == 553) {
                                     // target already exists
                                     ftp.DeleteFile(newPathInArchive);
@@ -343,7 +342,7 @@ namespace Oetools.Utilities.Archive.Ftp {
                             throw new ArchiverException($"Failed to move {file.PathInArchive.PrettyQuote()} to {file.NewRelativePathInArchive.PrettyQuote()} in {file.ArchivePath.PrettyQuote()}.", e);
                         }
                     }
-                    
+
                     FtpsClient.Instance.DisconnectFtp();
                 } catch (OperationCanceledException) {
                     throw;
@@ -353,7 +352,7 @@ namespace Oetools.Utilities.Archive.Ftp {
             }
             return totalFilesDone;
         }
-        
+
         /// <summary>
         ///     Connects to a FTP server trying every methods
         /// </summary>
@@ -374,7 +373,7 @@ namespace Oetools.Utilities.Archive.Ftp {
         ///     Connects to a FTP server trying every methods
         /// </summary>
         private void ConnectFtp(FtpsClient ftp, string userName, string passWord, string host, int port) {
-            
+
             NetworkCredential credential = null;
             if (!string.IsNullOrEmpty(userName)) {
                 credential = new NetworkCredential(userName, passWord ?? "");

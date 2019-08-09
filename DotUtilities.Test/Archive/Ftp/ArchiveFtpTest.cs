@@ -18,16 +18,15 @@
 // ========================================================================
 #endregion
 
-using System;
 using System.IO;
 using System.Threading;
+using DotUtilities.Archive.Ftp;
 using FubarDev.FtpServer;
 using FubarDev.FtpServer.FileSystem.DotNet;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Oetools.Utilities.Archive.Ftp;
 
-namespace Oetools.Utilities.Test.Archive.Ftp {
+namespace DotUtilities.Test.Archive.Ftp {
 
     [TestClass]
     public class ArchiveFtpTest : ArchiveTest {
@@ -74,8 +73,10 @@ namespace Oetools.Utilities.Test.Archive.Ftp {
                 // Initialize the FTP server
                 var ftpServer = serviceProvider.GetRequiredService<IFtpServer>();
 
+                var cs = new CancellationTokenSource();
+
                 // Start the FTP server
-                ftpServer.Start();
+                ftpServer.StartAsync(cs.Token).Wait();
 
                 SpinWait.SpinUntil(() => ftpServer.Ready, 5000);
 
@@ -86,7 +87,7 @@ namespace Oetools.Utilities.Test.Archive.Ftp {
                 WholeTest(archiver, listFiles);
 
                 // Stop the FTP server
-                ftpServer.Stop();
+                ftpServer.StopAsync(cs.Token).Wait();
             }
         }
     }

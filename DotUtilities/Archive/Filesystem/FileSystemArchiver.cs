@@ -1,20 +1,20 @@
 #region header
 // ========================================================================
-// Copyright (c) 2018 - Julien Caillon (julien.caillon@gmail.com)
-// This file (FileSystemArchiver.cs) is part of Oetools.Utilities.
-// 
-// Oetools.Utilities is a free software: you can redistribute it and/or modify
+// Copyright (c) 2019 - Julien Caillon (julien.caillon@gmail.com)
+// This file (FileSystemArchiver.cs) is part of DotUtilities.
+//
+// DotUtilities is a free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
-// Oetools.Utilities is distributed in the hope that it will be useful,
+//
+// DotUtilities is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
-// along with Oetools.Utilities. If not, see <http://www.gnu.org/licenses/>.
+// along with DotUtilities. If not, see <http://www.gnu.org/licenses/>.
 // ========================================================================
 #endregion
 
@@ -22,21 +22,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Oetools.Utilities.Lib;
-using Oetools.Utilities.Lib.Extension;
+using DotUtilities.Extensions;
 
-namespace Oetools.Utilities.Archive.Filesystem {
-    
+namespace DotUtilities.Archive.Filesystem {
+
     /// <summary>
     /// In that case, a folder on the file system represents an archive.
     /// </summary>
     internal class FileSystemArchiver : ArchiverBase, IArchiverFullFeatured {
-        
+
         private const int BufferSize = 1024 * 1024;
 
         /// <inheritdoc cref="IArchiver.OnProgress"/>
         public event EventHandler<ArchiverEventArgs> OnProgress;
-        
+
         /// <inheritdoc cref="IArchiver.ArchiveFileSet"/>
         public int ArchiveFileSet(IEnumerable<IFileToArchive> filesToArchive) {
             return DoForFiles(filesToArchive, ActionType.Pack);
@@ -88,7 +87,7 @@ namespace Oetools.Utilities.Archive.Filesystem {
         public int MoveFileSet(IEnumerable<IFileInArchiveToMove> filesToMove) {
             return DoForFiles(filesToMove, ActionType.Move);
         }
-        
+
         private int DoForFiles(IEnumerable<IFileArchivedBase> filesIn, ActionType action) {
             if (filesIn == null) {
                 return 0;
@@ -96,7 +95,7 @@ namespace Oetools.Utilities.Archive.Filesystem {
 
             var files = filesIn.ToList();
             files.ForEach(f => f.Processed = false);
-            
+
             var totalFiles = files.Count;
             var totalFilesDone = 0;
 
@@ -116,7 +115,7 @@ namespace Oetools.Utilities.Archive.Filesystem {
                             target = Path.Combine(file.ArchivePath ?? "", ((IFileInArchiveToMove) file).NewRelativePathInArchive).ToCleanPath();
                             break;
                     }
-                    
+
                     // ignore non existing files
                     if (string.IsNullOrEmpty(source) || !File.Exists(source)) {
                         continue;
@@ -129,7 +128,7 @@ namespace Oetools.Utilities.Archive.Filesystem {
                             Directory.CreateDirectory(dir);
                         }
                     }
-                    
+
                     try {
                         switch (action) {
                             case ActionType.Pack:
@@ -189,7 +188,7 @@ namespace Oetools.Utilities.Archive.Filesystem {
                     } catch (Exception e) {
                         throw new ArchiverException($"Failed to {action.ToString().ToLower()} {source.PrettyQuote()}{(string.IsNullOrEmpty(target) ? "" : $" in {target.PrettyQuote()}")}.", e);
                     }
-                    
+
                     totalFilesDone++;
                     file.Processed = true;
                     OnProgress?.Invoke(this, ArchiverEventArgs.NewProgress(file.ArchivePath, file.PathInArchive, Math.Round((double) totalFilesDone / totalFiles * 100, 2)));

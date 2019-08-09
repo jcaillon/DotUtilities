@@ -18,13 +18,11 @@
 // ========================================================================
 #endregion
 
-using System.Collections.Generic;
 using System.IO;
 using DotUtilities.Archive;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Oetools.Utilities.Archive;
 
-namespace Oetools.Utilities.Test.Archive.FileSystem {
+namespace DotUtilities.Test.Archive.FileSystem {
 
     [TestClass]
     public class FileSystemArchiverTest : ArchiveTest {
