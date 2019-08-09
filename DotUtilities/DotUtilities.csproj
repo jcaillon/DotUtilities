@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- ============================================================= -->
   <!-- PROJECT PROPERTIES -->
@@ -45,6 +45,10 @@
     <!-- add xtra nuget sources -->
     <!--<RestoreSources>$(RestoreSources);https://www.myget.org/F/natemcmaster/api/v3/index.json;https://dotnet.myget.org/F/dotnet-core/api/v3/index.json</RestoreSources>-->
   </PropertyGroup>
+
+  <ItemGroup Label="Specific ProjectReferences" Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
 
   <!-- Extra targets -->
   <Import Project="Target.*.target" />
