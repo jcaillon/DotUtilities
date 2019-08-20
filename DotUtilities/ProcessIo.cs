@@ -65,6 +65,16 @@ namespace DotUtilities {
         public Encoding RedirectedOutputEncoding { get; set; }
 
         /// <summary>
+        /// A dictionnary containing key values for environment variables to pass to the process.
+        /// </summary>
+        public Dictionary<string, string> EnvironmentVariables { get; set; }
+
+        /// <summary>
+        /// The user that will start the process (defaults to current if null).
+        /// </summary>
+        public ProcessOwner ProcessOwner { get; set; }
+
+        /// <summary>
         /// Cancellation token.
         /// </summary>
         public CancellationToken? CancelToken {
@@ -340,6 +350,22 @@ namespace DotUtilities {
                 FileName = ExecutablePath,
                 UseShellExecute = false
             };
+
+            if (EnvironmentVariables != null) {
+                foreach (var variable in EnvironmentVariables) {
+                    if (_startInfo.EnvironmentVariables.ContainsKey(variable.Key)) {
+                        _startInfo.EnvironmentVariables[variable.Key] = variable.Value;
+                    } else {
+                        _startInfo.EnvironmentVariables.Add(variable.Key, variable.Value);
+                    }
+                }
+            }
+
+            if (ProcessOwner != null) {
+                _startInfo.Domain = ProcessOwner.DomainName;
+                _startInfo.UserName = ProcessOwner.UserName;
+                _startInfo.Password = ProcessOwner.Password;
+            }
 
             if (arguments != null) {
                 _startInfo.Arguments = arguments.ToCliArgs();
