@@ -12,7 +12,6 @@ Status | Info
 [![Total downloads](https://img.shields.io/github/downloads/jcaillon/DotUtilities/total.svg)](https://github.com/jcaillon/DotUtilities/releases) | Total download
 [![GPLv3 licence](https://img.shields.io/badge/License-GPLv3-74A5C2.svg)](https://github.com/jcaillon/DotUtilities/blob/master/LICENSE) | GPLv3 License
 
-
 [AppVeyor]:http://www.appveyor.com/
 
 ## About
