@@ -9,8 +9,8 @@ param (
 
 function Main {
     # inspired by ci script from https://github.com/datalust/piggy.
-	# inspired by ci script from https://github.com/Azure/azure-functions-core-tools.
-    $path = $ProjectOrSolutionPath	
+    # inspired by ci script from https://github.com/Azure/azure-functions-core-tools.
+    $path = $ProjectOrSolutionPath  
 
     [string] $ciTag = If ([string]::IsNullOrEmpty($env:APPVEYOR_REPO_TAG_NAME)) {$env:CI_COMMIT_TAG} Else {$env:APPVEYOR_REPO_TAG_NAME}
     $isReleaseBuild = ![string]::IsNullOrEmpty($ciTag)

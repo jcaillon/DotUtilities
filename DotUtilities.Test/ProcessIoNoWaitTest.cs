@@ -42,7 +42,7 @@ namespace DotUtilities.Test {
                     process.WaitForExit(100);
                     Assert.IsFalse(process.Killed, "not killed");
                     Task.Factory.StartNew(() => {
-                        Thread.Sleep(100);
+                        Thread.Sleep(500);
                         cancel.Cancel();
                     });
                     var d = DateTime.Now;
