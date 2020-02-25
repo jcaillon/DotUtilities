@@ -92,7 +92,7 @@ namespace DotUtilities.Extensions {
         /// <param name="toCheck"></param>
         /// <param name="comparison"></param>
         /// <returns></returns>
-        public static bool ContainsCi(this string source, string toCheck, StringComparison comparison = StringComparison.Ordinal) {
+        public static bool ContainsCi(this string source, string toCheck, StringComparison comparison = StringComparison.OrdinalIgnoreCase) {
             return source.IndexOf(toCheck, comparison) >= 0;
         }
 
