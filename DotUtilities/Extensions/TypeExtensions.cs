@@ -161,6 +161,31 @@ namespace DotUtilities.Extensions {
         }
 
         /// <summary>
+        /// Copies all the public properties of one object to another.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// - If a property is a class and both the source and target values are not null, a sub deep copy is started on the properties of those 2 objects.
+        /// - If a property is a list or an array, the source value will not replace the target value, it will just be added to it.
+        /// - If a property is null in the source object, it won't replace the value in the target object.
+        /// </para>
+        /// </remarks>
+        /// <param name="sourceObj">The source object, from which to copy the public values.</param>
+        /// <param name="targetObj">The target object where will copy values to. This type should share common properties with the source object for the copy to do something. Can be null, in which case a new instance of type <paramref name="targetType"/> will be created.</param>
+        /// <param name="targetType"></param>
+        /// <returns>The targeted object.</returns>
+        /// <exception cref="Exception"></exception>
+        public static object DeepCopy(this object sourceObj, object targetObj, Type targetType) {
+            if (targetObj == null && (targetType.IsInterface || !HasDefaultConstructor(targetType))) {
+                throw new Exception($"Can't deep copy to a new instance without a default constructor for type {targetType}.");
+            }
+            if (targetObj != null && !targetType.IsInstanceOfType(targetObj)) {
+                throw new Exception($"The target object is not of type {targetType}.");
+            }
+            return DeepCopyPublicProperties(sourceObj, targetType, targetObj);
+        }
+
+        /// <summary>
         /// Create a new deep copy of an object, using its default constructor.
         /// </summary>
         /// <param name="sourceObj"></param>
