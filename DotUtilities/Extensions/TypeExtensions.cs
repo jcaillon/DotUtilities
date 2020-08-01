@@ -286,7 +286,7 @@ namespace DotUtilities.Extensions {
                     default:
                         if (sourceProperty.PropertyType.IsClass || sourceProperty.PropertyType.IsInterface) {
                             var targetObjValue = targetProperty.GetValue(targetObj);
-                            targetProperty.SetValue(targetObj, DeepCopyPublicProperties(obj, targetProperty.PropertyType, targetObjValue));
+                            targetProperty.SetValue(targetObj, DeepCopyPublicProperties(obj, obj.GetType(), targetObjValue));
                         } else {
                             targetProperty.SetValue(targetObj, obj);
                         }
