@@ -82,6 +82,7 @@ deploy:
   - provider: NuGet
     # generate at https://www.nuget.org/account/apikeys
     # encrypt at https://ci.appveyor.com/tools/encrypt
+    symbol_server: https://www.nuget.org/api/v2/symbolpackage
     api_key:
       secure: S994RFLzsOfpK5hmjMz6PlAgbJvhP2HtcXLlgo42Whczi8TVnnb18Ty/QqcNqWr6
     artifact: nupkg
