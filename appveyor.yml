@@ -83,10 +83,9 @@ deploy:
     # generate at https://www.nuget.org/account/apikeys
     # encrypt at https://ci.appveyor.com/tools/encrypt
     api_key:
-      secure: SY7k28jV9Iq76uEFyLXdomUX4alZ7ZYqIRqnbj0mdL9Ry1TgOs9kL2DrdK9jsN7j
+      secure: S994RFLzsOfpK5hmjMz6PlAgbJvhP2HtcXLlgo42Whczi8TVnnb18Ty/QqcNqWr6
     artifact: nupkg
     on:
-      branch: master
       APPVEYOR_REPO_TAG: true
 
   - provider: GitHub
@@ -101,7 +100,6 @@ deploy:
     draft: true
     prerelease: true
     on:
-      branch: master
       APPVEYOR_REPO_TAG: true
 
 #---------------------------------#
